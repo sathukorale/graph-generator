@@ -1,0 +1,249 @@
+<html>
+	<head>
+		<title>GraphGenerator</title>
+		<script>
+			//setTimeout(function() { location.reload(); }, 1000);
+		</script>
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+		<style>
+			.container
+			{
+				max-width: 600px;
+				width: auto;
+				margin:0 auto;
+				background-color: beige; 
+				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+				padding: 10px;
+			}
+
+			.title
+			{
+				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+				font-size: 23px;
+				text-align: center;
+				align-content: center;
+			}
+
+			.option-container
+			{
+				background-color: white;
+				width: 100%;
+				padding: 10px;
+			}
+
+			.option-title
+			{
+				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+				font-size: 17px;
+			}
+
+			.option-description
+			{
+				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+				font-size: 14px;
+				font-style: italic;
+				color: gray
+			}
+
+			.option-value-container
+			{
+				width: 100px;
+				text-align: end;
+			}
+
+			.option-value
+			{
+				width: 120px;
+			}
+
+			select
+			{
+				padding: 3px;
+				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+				border-radius: 5px;
+				border: 1px solid blueviolet;
+			}
+
+			input[type=text]
+			{
+				padding: 3px;
+				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+				border-radius: 5px;
+				border: 1px solid blueviolet;
+			}
+
+			input[type=button]
+			{
+				padding-top: 3px;
+				padding-bottom: 3px;
+				padding-left: 8px;
+				padding-right: 8px;
+				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+				border-radius: 5px;
+				background-color: rgb(117, 48, 48);
+				color: gainsboro;
+			}
+
+			.non-selectable
+			{
+				-webkit-user-select: none;
+				-moz-user-select: none;
+				-ms-user-select: none;
+				user-select: none;
+			}
+		</style>
+	</head>
+	<body class="non-selectable">
+		<table class="container">
+			<tr>
+				<td>
+					<table style="width: 100%;">
+						<tr>
+							<td class="title">Graph Generator</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td style="height: 10px;"></td>
+			</tr>
+			<tr>
+				<td>
+					<table class="option-container">
+						<tr>
+							<td class="option-title">Script Location</td>
+							<td>
+								<input type="text" style="width: 200px" id="txtScriptLocation" placeholder="Script Location"/>
+							</td>
+						</tr>
+						<tr class="option-description"><td>This is the location of the PlantUML/Dot file, that describes the diagram</td></tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<table class="option-container">
+						<tr class="option-title">
+							<td>Access Method</td>
+							<td>
+								<select class="option-value" id="cmbAccessMethod">
+									<option>via http or https</option>
+									<!--option>via git</option-->
+								</select>
+							</td>
+						</tr>
+						<tr class="option-description"><td>Whether the file can be accessed over https or git. The git method is much slower, however the https method requires the correponding repo to be public.</td></tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<table class="option-container">
+						<tr class="option-title">
+							<td>Content Type</td>
+							<td class="option-value-container">
+								<select class="option-value" id="cmbContentType">
+									<option>PlantUML</option>
+									<option>Dot</option>
+								</select>
+							</td>
+						</tr>
+						<tr class="option-description"><td>States whether this is a PlantUML script or a Dot script.</td></tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<table style="width: 100%; table-layout: fixed; border-collapse: collapse">
+						<tr>
+							<td style="width: 100%;">
+								<input type="text" style="width:100%; padding:8px;" readonly="true" id="txtGeneratedUrl" placeholder="Graph image url"/>
+							</td>
+							<td class="option-value-container" style="width: 0px;padding:0px">
+								<input type="button" value="Copy to Clipboard" style="position: relative; left: -156px; width: 150px; visibility: hidden" id="btnCopyToClipboard"/>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<table style="width: 100%; table-layout: fixed; border-collapse: collapse">
+						<tr>
+							<td style="width: 100%;">
+								<input type="text" style="width:100%; padding:8px;" readonly="true" id="txtGeneratedMarkdownContent" placeholder="Markdown content"/>
+							</td>
+							<td class="option-value-container" style="width: 0px;padding:0px">
+								<input type="button" value="Copy to Clipboard" style="position: relative; left: -156px; width: 150px; visibility: hidden" id="btnCopyToClipboardMarkDownContent"/>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+		<script>
+			$("#txtScriptLocation").keyup(function() { GenerateUrl(); });
+			$("#cmbAccessMethod").change(function() { GenerateUrl(); });
+			$("#cmbContentType").change(function() { GenerateUrl(); });
+
+			$("#btnCopyToClipboard").click(function()
+			{
+				CopyToClipboard($("#txtGeneratedUrl").val());
+				alert("The corresponding URL was copied to the clipboard, successfully.");
+			});
+
+			$("#btnCopyToClipboardMarkDownContent").click(function()
+			{
+				CopyToClipboard($("#txtGeneratedMarkdownContent").val());
+				alert("The corresponding markdown content was copied to the clipboard, successfully.");
+			});
+
+			function CopyToClipboard(textToCopy)
+			{
+				var currentScrollPosition = document.documentElement.scrollTop;
+				var tmpInput = document.createElement("input");
+				tmpInput.value = textToCopy;
+
+				document.body.append(tmpInput);
+				tmpInput.focus();
+				tmpInput.select();
+
+				var result = document.execCommand('copy');
+				document.body.removeChild(tmpInput);
+				document.documentElement.scrollTop = currentScrollPosition;
+			}
+
+			function GenerateUrl()
+			{
+				var valueScriptLocation = $("#txtScriptLocation").val();
+				var valueAccessMethod = $("#cmbAccessMethod").prop('selectedIndex');
+				var valueContentType = $("#cmbContentType").prop('selectedIndex');
+				var valueContentTypeName = "";
+				
+				if (! valueScriptLocation ||  valueAccessMethod == -1 || valueContentType == -1 || valueScriptLocation.trim().length == 0) 
+				{
+					$("#txtGeneratedUrl").val("");
+					$("#txtGeneratedMarkdownContent").val("");
+					$("#btnCopyToClipboard").css("visibility", "hidden");
+					$("#btnCopyToClipboardMarkDownContent").css("visibility", "hidden");
+					return;					
+				}
+				
+				valueScriptLocation = valueScriptLocation.trim();
+				valueAccessMethod = (valueAccessMethod == 0 ? "http" : "git");
+				valueContentType = (valueContentType == 0 ? "PlantUML" : "Dot");
+				valueContentTypeName = valueContentType;
+				valueContentType = valueContentType.toLowerCase();
+
+				var serverUrl = "http://172.25.95.193:3000/"
+				var url = serverUrl + "generate-graph?location=" + encodeURIComponent(valueScriptLocation) + "&accessMethod=" + valueAccessMethod + "&contentType=" + valueContentType;
+				var mardownContent = "![" + valueContentTypeName + " Diagram](" + url + ")";
+
+				$("#txtGeneratedUrl").val(url);
+				$("#txtGeneratedMarkdownContent").val(mardownContent);
+				$("#btnCopyToClipboard").css("visibility", "visible");
+				$("#btnCopyToClipboardMarkDownContent").css("visibility", "visible");
+			}
+		</script>
+	</body>
+</html>

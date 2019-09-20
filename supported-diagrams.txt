@@ -1,0 +1,1 @@
+plantuml,dot,graphviz,mermaid,ditaa,actdiag,nwdiag,blockdiag,seqdiag,packetdiag,rackdiag
