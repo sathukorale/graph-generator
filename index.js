@@ -7,13 +7,13 @@ const writeFileAsync = util.promisify(fs.writeFile);
 const unlinkFileAsync = util.promisify(fs.unlink);
 const crypto = require('crypto');
 
-const rootLocation = "/root/apps/"
+const rootLocation = "/root/Workspace/gg/"
 const appLocation = rootLocation + "graph-generator/";
 const appDataDirectory = appLocation + "data/";
 const appTmpDataDirectory = appLocation + "data/tmp/";
 
 const plantUmlJarLocation = rootLocation + "plantuml/plantuml.jar";
-const dotBinaryLocation = rootLocation + "graphviz/bin/dot";
+const dotBinaryLocation = rootLocation + "/usr/bin/dot";
 const asciiDoctorLocation = "/usr/local/rvm/gems/ruby-2.6.3/bin/asciidoctor";
 const mermaidBinaryLocation = appLocation + "./node_modules/.bin/mmdc";
 const ditaaJarLocation = rootLocation + "ditaa/ditaa.jar";
@@ -26,13 +26,14 @@ const scriptContentRecordsFilePath = appDataDirectory + "contentrequests.recordf
 const stashAccessibleUserName = "mmd_ciuser";
 const stashAccessibleUserPasswd = "mit@12345";
 const stashAccessibleUser = stashAccessibleUserName + ":" + stashAccessibleUserPasswd;
-const serverPort = 3000;
+const serverPort = 3001;
 
 const formatsSupportedByRegularMeans = [ "plantuml", "dot", "graphviz", "mermaid", "ditaa", "actdiag", "nwdiag" ]
 const formatsSupportedByAsciiDctor = [ "blockdiag", "erd", "msc", "packetdiag", "rackdiag", "seqdiag", "shaape", "syntrax", "umlet", "vega", "vegalite", "wavedrom" ];
 
 app.get('/', onShowDefaultPageRequest);
 app.get('/generate-graph', onGenerateGraphRequest);
+app.get('/get-supported-graphs', onGetSupportedGraphList);
 
 app.listen(serverPort, () => console.log(" >> GraphGenerator starting on port, " + serverPort + "..."));
 
@@ -59,6 +60,17 @@ function onShowDefaultPageRequest(request, response)
 	response.sendFile(defaultPage);
 
 	console.log(" >> Default page request. Replying back with the default page. (RemoteEndpoint='" + ip + "')");
+}
+
+function onGetSupportedGraphList(request, response)
+{
+	var content = "";
+	for (var i in formatsSupportedByRegularMeans) content += ((content.length > 0 ? ";" : "") + formatsSupportedByRegularMeans[i]);
+	
+	response.status(200);
+	response.send(content);
+
+	console.log(" >> Supported graph list requested. Replying back with the list. (SupportedGraphList='" + content + "')");
 }
 
 function onGenerateGraphRequestWithFile(request, response)
@@ -92,7 +104,7 @@ function onGenerateGraphRequestWithFile(request, response)
 function onGenerateGraphRequestWithContent(request, response)
 {
 	var isEncoded = request.query.isEncoded ? true : false;
-	var scriptContent = isEncoded ? (Buffer.from(decodeURIComponent(request.query.scriptContent), 'base64').toString()) : request.query.scriptContent;
+	var scriptContent = isEncoded ? (Buffer.from(decodeURIComponent(request.query.scriptContent), 'base64').toString('utf-8')) : request.query.scriptContent;
 	var contentType = request.query.contentType;
 
 	if (IsSupportedByTheScript(contentType) == false)
@@ -155,7 +167,7 @@ function GetFileSize(filePath)
 		let stats = fs.statSync(filePath)
 		return stats.size;
 	}
-	catch { }
+	catch (ex) { }
 
 	return 0;
 }
