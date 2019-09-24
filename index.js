@@ -17,8 +17,7 @@ const dotBinaryLocation = rootLocation + "/usr/bin/dot";
 const asciiDoctorLocation = "/usr/local/rvm/gems/ruby-2.6.3/bin/asciidoctor";
 const mermaidBinaryLocation = appLocation + "./node_modules/.bin/mmdc";
 const ditaaJarLocation = rootLocation + "ditaa/ditaa.jar";
-const actdiagLocation = "/usr/bin/actdiag";
-const nwdiagLocation = "/usr/bin/nwdiag";
+const diagToolLocation = "/usr/bin/[TOOL_NAME]";
 
 const puppeteerConfigLocation = appLocation + "puppeteer-config.json"
 const scriptContentRecordsFilePath = appDataDirectory + "contentrequests.recordfile";
@@ -28,8 +27,8 @@ const stashAccessibleUserPasswd = "mit@12345";
 const stashAccessibleUser = stashAccessibleUserName + ":" + stashAccessibleUserPasswd;
 const serverPort = 3001;
 
-const formatsSupportedByRegularMeans = [ "plantuml", "dot", "graphviz", "mermaid", "ditaa", "actdiag", "nwdiag" ]
-const formatsSupportedByAsciiDctor = [ "blockdiag", "erd", "msc", "packetdiag", "rackdiag", "seqdiag", "shaape", "syntrax", "umlet", "vega", "vegalite", "wavedrom" ];
+const formatsSupportedByRegularMeans = [ "plantuml", "dot", "graphviz", "mermaid", "ditaa", "actdiag", "nwdiag", "blockdiag", "seqdiag", "packetdiag", "rackdiag" ]
+const formatsSupportedByAsciiDctor = [ "erd", "msc", "shaape", "syntrax", "umlet", "vega", "vegalite", "wavedrom" ];
 
 app.get('/', onShowDefaultPageRequest);
 app.get('/generate-graph', onGenerateGraphRequest);
@@ -337,31 +336,26 @@ function GraphGenerator(response)
 
 			exec("java -jar " + ditaaJarLocation + " " + inputFileName + " " + outputFileName, OnGraphGenerated);
 		}
-		else if (contentType == "actdiag")
+		else if (contentType == "actdiag" ||
+			 contentType == "nwdiag" ||
+			 contentType == "blockdiag" ||
+			 contentType == "seqdiag" ||
+			 contentType == "packetdiag" ||
+			 contentType == "rackdiag")
 		{
-			if (fs.existsSync(actdiagLocation) == false)
+			var toolName = contentType;
+			var toolLocation = diagToolLocation.replace("[TOOL_NAME]", toolName);
+
+			if (fs.existsSync(toolLocation) == false)
                         {
-                                console.log(" >> The required 'actdiag' binary was not found at, '" + actdiagLocation + "'. This is indicative of a server-side error.");
+                                console.log(" >> The required '" + toolName + "' binary was not found at, '" + toolLocation + "'. This is indicative of a server-side error.");
 
                                 self._response.status(500);
-                                self._response.send("Couldn't locate the required 'actdiag' binary.");
+                                self._response.send("Couldn't locate the required '" + toolName + "' binary.");
                                 return;
                         }
 
-			exec(actdiagLocation + " " + inputFileName + " -o " + outputFileName, OnGraphGenerated);
-		}
-		else if (contentType == "nwdiag")
-		{
-			if (fs.existsSync(nwdiagLocation) == false)
-                        {
-                                console.log(" >> The required 'nwdiag' binary was not found at, '" + nwdiagLocation + "'. This is indicative of a server-side error.");
-
-                                self._response.status(500);
-                                self._response.send("Couldn't locate the required 'nwdiag' binary.");
-                                return;
-                        }
-
-			exec(nwdiagLocation + " \"" + inputFileName + "\" -o \"" + outputFileName + "\"", OnGraphGenerated);
+			exec(toolLocation + " \"" + inputFileName + "\" -o \"" + outputFileName + "\"", OnGraphGenerated);
 		}
 		else if (IsSupportedByAsciiDoctor(contentType))
 		{
