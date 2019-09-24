@@ -29,7 +29,7 @@ function CreateTempSubDir()
 
 function CreateDependencySubDir()
 {
-    subDirPath="$pluginDirectory/$1"
+    subDirPath="$dependencyDirectory/$1"
     CreateDirectory "$subDirPath"
     echo "$subDirPath"
 }
@@ -41,7 +41,7 @@ function CleanTempDir()
 
 function CleanDependencyDirectory()
 {
-    DeleteDirectory "$pluginDirectory"
+    DeleteDirectory "$dependencyDirectory"
 }
 
 function Log()

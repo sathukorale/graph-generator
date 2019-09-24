@@ -5,7 +5,7 @@ function SetupPlantUml()
 {
     cd "$appDirectory"
 
-    Log "Setting the up the 'Plantuml' installation."
+    Log "Setting up the 'Plantuml' installation."
     Log " ﹂ Downloading Plantuml binary..."
     
     plantumlAppDirectory=`CreateDependencySubDir "plantuml"`

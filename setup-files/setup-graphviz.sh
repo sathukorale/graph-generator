@@ -5,7 +5,7 @@ function SetupDot()
 {
     cd "$appDirectory"
 
-    Log "Setting the up the 'dot' installation."
+    Log "Setting up the 'dot' installation."
     Log " ﹂ Downloading Graphviz sources..."
     
     tempDirectory=`CreateTempSubDir "graphviz"`

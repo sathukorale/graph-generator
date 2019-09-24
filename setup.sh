@@ -35,17 +35,17 @@ function Setup()
     CleanTempDir
     CleanDependencyDirectory
 
-    SetupLibpng
+    #SetupLibpng
     Log ""
-    SetupLibgd
+    #SetupLibgd
     Log ""
-    SetupDot
+    #SetupDot
     Log ""
-    SetupPlantUml
+    #SetupPlantUml
     Log ""
-    SetupMermaid
+    #SetupMermaid
     Log ""
-    SetupDitaa
+    #SetupDitaa
     Log ""
     SetupBlockdiagTools
 }

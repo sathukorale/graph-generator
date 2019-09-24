@@ -8,7 +8,7 @@ function SetupLibpng()
 
     cd "$appDirectory"
 
-    Log "Setting the up the 'libpng' installation."
+    Log "Setting up the 'libpng' installation."
     Log " ﹂ Downloading libpng sources..."
     
     tempDirectory=`CreateTempSubDir "libpng"`

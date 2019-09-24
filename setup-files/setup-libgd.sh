@@ -8,7 +8,7 @@ function SetupLibgd()
 
     cd "$appDirectory"
 
-    Log "Setting the up the 'libgd' installation."
+    Log "Setting up the 'libgd' installation."
     Log " ﹂ Downloading libgd sources..."
     
     tempDirectory=`CreateTempSubDir "libgd"`

@@ -5,7 +5,7 @@ function SetupMermaid()
 {
     cd "$appDirectory"
 
-    Log "Setting the up the 'Mermaid' installation."
+    Log "Setting up the 'Mermaid' installation."
     Log " ﹂ Checking whether 'Mermaid' is already installed..."
     
     mermaidBinaryLocation="$appDirectory/node_modules/.bin/mmdc"

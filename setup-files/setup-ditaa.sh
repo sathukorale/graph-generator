@@ -5,7 +5,7 @@ function SetupDitaa()
 {
     cd "$appDirectory"
 
-    Log "Setting the up the 'Ditaa' installation."
+    Log "Setting up the 'Ditaa' installation."
     Log " ﹂ Downloading Ditaa binary..."
     
     ditaaAppDirectory=`CreateDependencySubDir "ditaa"`

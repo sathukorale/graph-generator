@@ -5,7 +5,18 @@ function SetupBlockdiagTools()
 {
     cd "$appDirectory"
 
-    Log "Setting the up the 'Blockdiag Tools' installation."
+    Log "Setting up the 'Blockdiag Tools' installation."
+    
+    blockDiagAppDir=`CreateDependencySubDir "blockdiag-tools"`
+    pythonVersion=`python -c "import sys; print('%d.%d' % (sys.version_info.major, sys.version_info.minor));"`
+    
+    suggestedPackageSite="$blockDiagAppDir/lib/python${pythonVersion}/site-packages"
+    defaultPackageSite=`python -m site --user-site`
+    
+    mkdir -p "$suggestedPackageSite"
+    export PYTHONPATH="$suggestedPackageSite:$defaultPackageSite:$PYTHONPATH"
+    
+	pip install --install-option="--prefix=$blockDiagAppDir" "webcolors" #> /dev/null 2>&1
     
     InstallBlockdiagTool "actdiag"
     InstallBlockdiagTool "nwdiag"
@@ -28,9 +39,9 @@ function InstallBlockdiagTool()
 		return
 	fi
 
-	Log " ﹂ Attempting to install '$toolName'."
+	Log " ﹂ Attempting to install '$toolName' into '$blockDiagAppDir'."
 	
-	easy_install --prefix="$blockDiagAppDir" "$toolName" > /dev/null 2>&1
+	pip install --install-option="--prefix=$blockDiagAppDir" "$toolName" #> /dev/null 2>&1
 	if [ $? -ne 0 ]; then
 		Log "     ﹂ Failed to install '$toolName'. Please try installing '$toolName' manually."
 		exit 1
