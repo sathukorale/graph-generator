@@ -12,7 +12,7 @@ function SetupLibgd()
     Log " ﹂ Downloading libgd sources..."
     
     tempDirectory=`CreateTempSubDir "libgd"`
-    libgdAppDirectory=`CreatePluginSubDir "libgd"`
+    libgdAppDirectory=`CreateDependencySubDir "libgd"`
 
     if [ `DownloadFile "$libgdSources" "$downloadFilePath"` == "SUCCESS" ]
     then

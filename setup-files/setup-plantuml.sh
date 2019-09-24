@@ -8,7 +8,7 @@ function SetupPlantUml()
     Log "Setting the up the 'Plantuml' installation."
     Log " ﹂ Downloading Plantuml binary..."
     
-    plantumlAppDirectory=`CreatePluginSubDir "plantuml"`
+    plantumlAppDirectory=`CreateDependencySubDir "plantuml"`
 
     plantumlPackage="http://sourceforge.net/projects/plantuml/files/plantuml.jar/download"
     downloadFilePath="$plantumlAppDirectory/plantuml.jar"

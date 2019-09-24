@@ -12,7 +12,7 @@ function SetupLibpng()
     Log " ﹂ Downloading libpng sources..."
     
     tempDirectory=`CreateTempSubDir "libpng"`
-    libpngAppDirectory=`CreatePluginSubDir "libpng"`
+    libpngAppDirectory=`CreateDependencySubDir "libpng"`
 
     if [ `DownloadFile "$libpngSources" "$downloadFilePath"` == "SUCCESS" ]
     then

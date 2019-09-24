@@ -1,5 +1,5 @@
 temporaryDirectory="$appDirectory/tmp"
-pluginDirectory="$appDirectory/plugins"
+dependencyDirectory="$appDirectory/dependencies"
 coreCount=`grep -c ^processor /proc/cpuinfo`
 
 function CreateDirectory()
@@ -27,7 +27,7 @@ function CreateTempSubDir()
     echo "$subDirPath"
 }
 
-function CreatePluginSubDir()
+function CreateDependencySubDir()
 {
     subDirPath="$pluginDirectory/$1"
     CreateDirectory "$subDirPath"
@@ -39,7 +39,7 @@ function CleanTempDir()
     DeleteDirectory "$temporaryDirectory"
 }
 
-function CleanPluginDirectory()
+function CleanDependencyDirectory()
 {
     DeleteDirectory "$pluginDirectory"
 }

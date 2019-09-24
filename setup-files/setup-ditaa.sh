@@ -8,7 +8,7 @@ function SetupDitaa()
     Log "Setting the up the 'Ditaa' installation."
     Log " ﹂ Downloading Ditaa binary..."
     
-    ditaaAppDirectory=`CreatePluginSubDir "ditaa"`
+    ditaaAppDirectory=`CreateDependencySubDir "ditaa"`
 
     ditaaPackage="https://sourceforge.net/projects/ditaa/files/ditaa/0.9/ditaa0_9.zip/download"
     downloadFilePath="$ditaaAppDirectory/ditaa.jar"

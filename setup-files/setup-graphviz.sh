@@ -9,7 +9,7 @@ function SetupDot()
     Log " ﹂ Downloading Graphviz sources..."
     
     tempDirectory=`CreateTempSubDir "graphviz"`
-    graphvizAppDirectory=`CreatePluginSubDir "graphviz"`
+    graphvizAppDirectory=`CreateDependencySubDir "graphviz"`
 
     graphvizPackage="https://graphviz.gitlab.io/pub/graphviz/stable/SOURCES/graphviz.tar.gz"
     downloadFilePath="$temporaryDirectory/graphviz.tar.gz"
