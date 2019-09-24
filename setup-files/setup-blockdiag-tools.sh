@@ -8,15 +8,20 @@ function SetupBlockdiagTools()
     Log "Setting up the 'Blockdiag Tools' installation."
     
     blockDiagAppDir=`CreateDependencySubDir "blockdiag-tools"`
-    pythonVersion=`python -c "import sys; print('%d.%d' % (sys.version_info.major, sys.version_info.minor));"`
+    pythonVersion=`python -c "import sys; print('%d.%d' % (sys.version_info.major, sys.version_info.minor));" 2>/dev/null`
     
     suggestedPackageSite="$blockDiagAppDir/lib/python${pythonVersion}/site-packages"
-    defaultPackageSite=`python -m site --user-site`
+    defaultPackageSite=`python -m site --user-site 2>/dev/null`
     
-    mkdir -p "$suggestedPackageSite"
+    mkdir -p "$suggestedPackageSite" > /dev/null 2>&1
     export PYTHONPATH="$suggestedPackageSite:$defaultPackageSite:$PYTHONPATH"
     
-	pip install --install-option="--prefix=$blockDiagAppDir" "webcolors" #> /dev/null 2>&1
+    Log " ﹂ Installing 'webcolors' which is required by blockdiag binaries..."
+	pip install --system --prefix=$blockDiagAppDir "webcolors" > /dev/null 2>&1
+
+    export CPPFLAGS="-I$DEPENDENCY_zlibDirectory/include -I$DEPENDENCY_libjpegDirectory/include $CPPFLAGS"
+    export LDFLAGS="-L$DEPENDENCY_zlibDirectory/lib -L$DEPENDENCY_libjpegDirectory/lib $CPPFLAGS"
+    export PATH="$blockDiagAppDir/bin:$PATH"
     
     InstallBlockdiagTool "actdiag"
     InstallBlockdiagTool "nwdiag"
@@ -41,7 +46,7 @@ function InstallBlockdiagTool()
 
 	Log " ﹂ Attempting to install '$toolName' into '$blockDiagAppDir'."
 	
-	pip install --install-option="--prefix=$blockDiagAppDir" "$toolName" #> /dev/null 2>&1
+	pip install --system --prefix=$blockDiagAppDir "$toolName" > /dev/null 2>&1
 	if [ $? -ne 0 ]; then
 		Log "     ﹂ Failed to install '$toolName'. Please try installing '$toolName' manually."
 		exit 1
@@ -55,5 +60,5 @@ function InstallBlockdiagTool()
 	
 	Log "     ﹂ '$toolName' was installed into '$binaryLocation'."
 	
-    export "DEPENDENCY_${binaryLocation}Binary"="$binaryLocation"
+    export "DEPENDENCY_${toolName}Binary"="$binaryLocation"
 }

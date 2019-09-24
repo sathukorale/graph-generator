@@ -11,6 +11,8 @@ source "$appDirectory/setup-files/setup-plantuml.sh"
 source "$appDirectory/setup-files/setup-mermaid.sh"
 source "$appDirectory/setup-files/setup-ditaa.sh"
 source "$appDirectory/setup-files/setup-blockdiag-tools.sh"
+source "$appDirectory/setup-files/setup-zlib.sh"
+source "$appDirectory/setup-files/setup-libjpeg.sh"
 
 DEPENDENCY_libgdDirectory=""
 DEPENDENCY_graphvizDirectory=""
@@ -24,6 +26,8 @@ DEPENDENCY_blockdiagBinary=""
 DEPENDENCY_seqdiagBinary=""
 DEPENDENCY_packetdiagBinary=""
 DEPENDENCY_rackdiagBinary=""
+DEPENDENCY_zlibDirectory=""
+DEPENDENCY_libjpegDirectory=""
 
 function Setup()
 {
@@ -35,18 +39,30 @@ function Setup()
     CleanTempDir
     CleanDependencyDirectory
 
-    #SetupLibpng
+    SetupLibpng
     Log ""
-    #SetupLibgd
+
+    SetupLibjpeg
     Log ""
-    #SetupDot
+
+    SetupLibgd
     Log ""
-    #SetupPlantUml
+
+    SetupDot
     Log ""
-    #SetupMermaid
+
+    SetupPlantUml
     Log ""
-    #SetupDitaa
+
+    SetupMermaid
     Log ""
+
+    SetupDitaa
+    Log ""
+
+    SetupZlib
+    Log ""
+    
     SetupBlockdiagTools
 }
 
