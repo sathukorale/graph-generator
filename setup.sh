@@ -66,6 +66,28 @@ function GenerateDepedenciesJs()
     
 }
 
+function GenerateStartScript()
+{
+    echo "#!/bin/bash" > "$appDirectory/start.sh"
+    echo "" >> "$appDirectory/start.sh"
+    echo "export LD_LIBRARY_PATH=\"$DEPENDENCY_graphvizDirectory/lib:$LD_LIBRARY_PATH\"" >> "$appDirectory/start.sh"
+    echo "export LD_LIBRARY_PATH_64=\"$DEPENDENCY_graphvizDirectory/lib:$LD_LIBRARY_PATH_64\"" >> "$appDirectory/start.sh"
+    echo "" >> "$appDirectory/start.sh"
+    echo "export LD_LIBRARY_PATH=\"$DEPENDENCY_libgdDirectory/lib:$LD_LIBRARY_PATH\"" >> "$appDirectory/start.sh"
+    echo "export LD_LIBRARY_PATH_64=\"$DEPENDENCY_libgdDirectory/lib:$LD_LIBRARY_PATH_64\"" >> "$appDirectory/start.sh"
+    echo "" >> "$appDirectory/start.sh"
+    echo "export LD_LIBRARY_PATH=\"$DEPENDENCY_libjpegDirectory/lib:$LD_LIBRARY_PATH\"" >> "$appDirectory/start.sh"
+    echo "export LD_LIBRARY_PATH_64=\"$DEPENDENCY_libjpegDirectory/lib:$LD_LIBRARY_PATH_64\"" >> "$appDirectory/start.sh"
+    echo "" >> "$appDirectory/start.sh"
+    echo "export LD_LIBRARY_PATH=\"$DEPENDENCY_libpngDirectory/lib:$LD_LIBRARY_PATH\"" >> "$appDirectory/start.sh"
+    echo "export LD_LIBRARY_PATH_64=\"$DEPENDENCY_libpngDirectory/lib:$LD_LIBRARY_PATH_64\"" >> "$appDirectory/start.sh"
+    echo "" >> "$appDirectory/start.sh"
+    echo "export LD_LIBRARY_PATH=\"$DEPENDENCY_zlibDirectory/lib:$LD_LIBRARY_PATH\"" >> "$appDirectory/start.sh"
+    echo "export LD_LIBRARY_PATH_64=\"$DEPENDENCY_zlibDirectory/lib:$LD_LIBRARY_PATH_64\"" >> "$appDirectory/start.sh"
+    echo "" >> "$appDirectory/start.sh"
+    echo "screen -dm bash -c \" node --max-http-header-size=80000 index.js\" -S nodejs-graph-generator" >> "$appDirectory/start.sh"
+}
+
 function Setup()
 {
     Log "* AppDirectory = '$appDirectory'"
@@ -104,6 +126,7 @@ function Setup()
     Log ""
     
     GenerateDepedenciesJs
+    GenerateStartScript
 }
 
 Setup

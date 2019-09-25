@@ -37,14 +37,14 @@ function SetupLibpng()
     cd "$libpngDirectory"
 
     Log " ﹂ Attempting to compile libpng."
-    ./configure --prefix="$libpngAppDirectory" > /dev/null 2>&1
+    ./configure --prefix="$libpngAppDirectory" --with-zlib-prefix="$DEPENDENCY_zlibDirectory" > /dev/null 2>&1
     if [[ $? -ne 0 ]]
     then
         Log "     ﹂ Failed to configure. Please try manually configuring '$libpngDirectory'."
         exit 1
     fi
 
-    make "-j$coreCount" > /dev/null 2>&1
+        make "-j$coreCount" > /dev/null 2>&1
     if [[ $? -ne 0 ]]
     then
         Log "     ﹂ Failed to build. Please try manually building '$libpngDirectory'."

@@ -37,7 +37,7 @@ function SetupLibgd()
     cd "$libgdDirectory"
 
     Log " ﹂ Attempting to compile libgd."
-    ./configure --prefix="$libgdAppDirectory" --with-png="$DEPENDENCY_libpngDirectory" > /dev/null 2>&1
+    ./configure --prefix="$libgdAppDirectory" --with-png="$DEPENDENCY_libpngDirectory" --with-zlib="$DEPENDENCY_zlibDirectory" > /dev/null 2>&1
     if [[ $? -ne 0 ]]
     then
         Log "     ﹂ Failed to configure. Please try manually configuring '$libgdDirectory'."
