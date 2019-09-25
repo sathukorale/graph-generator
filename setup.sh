@@ -33,7 +33,7 @@ function GenerateDepedenciesJs()
 {
     Log "Generating the Dependencies JS File..."
     
-    echo -e "const graphvizBinary = '$DEPENDENCY_graphvizDirectory/bin/dot';" > "$appDirectory/dependencies.js"
+    echo -e "const graphvizBinary = '$DEPENDENCY_graphvizDirectory/bin/dot';" >> "$appDirectory/dependencies.js"
     echo -e "const plantumlBinary = '$DEPENDENCY_plantumlBinary';" >> "$appDirectory/dependencies.js"
     echo -e "const mermaidBinary = '$DEPENDENCY_mermaidBinary';" >> "$appDirectory/dependencies.js"
     echo -e "const ditaaBinary = '$DEPENDENCY_ditaaBinary';" >> "$appDirectory/dependencies.js"
@@ -65,14 +65,28 @@ function GenerateDepedenciesJs()
     echo -e "\tconsole.log(\"* Packetdiag Binary Path = '\" + packetdiagBinary + \"'\");" >> "$appDirectory/dependencies.js"
     echo -e "\tconsole.log(\"* Rackdiag Binary Path = '\" + rackdiagBinary + \"'\");" >> "$appDirectory/dependencies.js"
     echo -e "}" >> "$appDirectory/dependencies.js"
-    
+    echo -e "" >> "$appDirectory/dependencies.js"
+    echo -e "module.exports = {" >> "$appDirectory/dependencies.js"
+    echo -e "\tgraphvizBinary," >> "$appDirectory/dependencies.js"
+    echo -e "\tplantumlBinary," >> "$appDirectory/dependencies.js"
+    echo -e "\tmermaidBinary," >> "$appDirectory/dependencies.js"
+    echo -e "\tditaaBinary," >> "$appDirectory/dependencies.js"
+    echo -e "\tactdiagBinary," >> "$appDirectory/dependencies.js"
+    echo -e "\tnwdiagBinary," >> "$appDirectory/dependencies.js"
+    echo -e "\tblockdiagBinary," >> "$appDirectory/dependencies.js"
+    echo -e "\tseqdiagBinary," >> "$appDirectory/dependencies.js"
+    echo -e "\tpacketdiagBinary," >> "$appDirectory/dependencies.js"
+    echo -e "\trackdiagBinary," >> "$appDirectory/dependencies.js"
+    echo -e "\tblockdiagTools," >> "$appDirectory/dependencies.js"
+    echo -e "\tPrintDependencyLocations" >> "$appDirectory/dependencies.js"
+    echo -e "};" >> "$appDirectory/dependencies.js"
 }
 
 function GenerateStartScript()
 {
     Log "Generating the Start Script..."
     
-    echo -e "#!/bin/bash" > "$appDirectory/start.sh"
+    echo -e "#!/bin/bash" >> "$appDirectory/start.sh"
     echo -e "" >> "$appDirectory/start.sh"
     echo -e "export LD_LIBRARY_PATH=\"$DEPENDENCY_graphvizDirectory/lib:\$LD_LIBRARY_PATH\"" >> "$appDirectory/start.sh"
     echo -e "export LD_LIBRARY_PATH_64=\"$DEPENDENCY_graphvizDirectory/lib:\$LD_LIBRARY_PATH_64\"" >> "$appDirectory/start.sh"
@@ -89,7 +103,15 @@ function GenerateStartScript()
     echo -e "export LD_LIBRARY_PATH=\"$DEPENDENCY_zlibDirectory/lib:\$LD_LIBRARY_PATH\"" >> "$appDirectory/start.sh"
     echo -e "export LD_LIBRARY_PATH_64=\"$DEPENDENCY_zlibDirectory/lib:\$LD_LIBRARY_PATH_64\"" >> "$appDirectory/start.sh"
     echo -e "" >> "$appDirectory/start.sh"
-    echo -e "screen -dm bash -c \" node --max-http-header-size=80000 index.js\" -S nodejs-graph-generator" >> "$appDirectory/start.sh"
+    echo -e "if [ ! -f \"$appDirectory/dependencies.js\" ]" >> "$appDirectory/start.sh"
+    echo -e "then" >> "$appDirectory/start.sh"
+    echo -e "\techo \"Looks like the GraphGenerator server isn't setup properly. Please run the 'setup.sh' script to do the initial setup.\"" >> "$appDirectory/start.sh"
+    echo -e "\treturn" >> "$appDirectory/start.sh"
+    echo -e "fi" >> "$appDirectory/start.sh"
+    echo -e "" >> "$appDirectory/start.sh"
+    echo -e "screen -dm bash -c \"node --max-http-header-size=80000 index.js\" -S nodejs-graph-generator" >> "$appDirectory/start.sh"
+    
+    chmod +x "$appDirectory/start.sh"
 }
 
 function Setup()
@@ -99,7 +121,7 @@ function Setup()
     Log "* Temp Directory = '$temporaryDirectory'"
     Log ""
     
-    if [ -f "$appDirectory/depdendencies.js" ] && [ -f "$appDirectory/start.sh" ]
+    if [ -f "$appDirectory/dependencies.js" ] && [ -f "$appDirectory/start.sh" ]
     then
         echo "Looks like the server is already setup. If you think that there is an issue with the configuration or want to reset the setup, please delete the '$appDirectory/depdendencies.js' and the '$appDirectory/start.sh' and re-run the script."
         exit 0

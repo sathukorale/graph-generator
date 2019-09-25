@@ -6,21 +6,29 @@ const util = require('util');
 const writeFileAsync = util.promisify(fs.writeFile);
 const unlinkFileAsync = util.promisify(fs.unlink);
 const crypto = require('crypto');
+const path = require('path');
 
-const rootLocation = "/root/Workspace/gg/"
-const appLocation = rootLocation + "graph-generator/";
-const appDataDirectory = appLocation + "data/";
-const appTmpDataDirectory = appLocation + "data/tmp/";
+const appLocation = path.dirname(require.main.filename);
+const appDataDirectory = path.join(appLocation, "data");
+const appResourcesDirectory = path.join(appLocation, "resources")
+const appTmpDataDirectory = path.join(appDataDirectory, "tmp");
 
-const plantUmlJarLocation = rootLocation + "plantuml/plantuml.jar";
-const dotBinaryLocation = rootLocation + "/usr/bin/dot";
+const dependenciesJsFile = path.join(appLocation, "dependencies.js");
+if (! fs.existsSync(dependenciesJsFile)) throw "Looks like the GraphGenerator server isn't setup properly. Please run the 'setup.sh' script to do the initial setup.";
+
+const dependencies = require(dependenciesJsFile);
+
+const plantUmlJarLocation = dependencies.plantumlBinary;
+const dotBinaryLocation = dependencies.graphvizBinary;
 const asciiDoctorLocation = "/usr/local/rvm/gems/ruby-2.6.3/bin/asciidoctor";
-const mermaidBinaryLocation = appLocation + "./node_modules/.bin/mmdc";
-const ditaaJarLocation = rootLocation + "ditaa/ditaa.jar";
-const diagToolLocation = "/usr/bin/[TOOL_NAME]";
+const mermaidBinaryLocation = dependencies.mermaidBinary;
+const ditaaJarLocation = dependencies.ditaaBinary;
+const diagtoolLocations = dependencies.blockdiagTools;
 
-const puppeteerConfigLocation = appLocation + "puppeteer-config.json"
-const scriptContentRecordsFilePath = appDataDirectory + "contentrequests.recordfile";
+const defaultPage = path.join(appResourcesDirectory, "default.html");
+const puppeteerConfigLocation = path.join(appResourcesDirectory, "puppeteer-config.json");
+
+const scriptContentRecordsFilePath = path.join(appDataDirectory, "contentrequests.recordfile");
 
 const stashAccessibleUserName = "mmd_ciuser";
 const stashAccessibleUserPasswd = "mit@12345";
@@ -34,7 +42,12 @@ app.get('/', onShowDefaultPageRequest);
 app.get('/generate-graph', onGenerateGraphRequest);
 app.get('/get-supported-graphs', onGetSupportedGraphList);
 
-app.listen(serverPort, () => console.log(" >> GraphGenerator starting on port, " + serverPort + "..."));
+app.listen(serverPort, () => 
+{
+	dependencies.PrintDependencyLocations()
+	console.log();
+	console.log(" >> GraphGenerator starting on port, " + serverPort + "...");
+});
 
 function IsSupportedByAsciiDoctor(contentType)
 {
@@ -54,11 +67,9 @@ function IsSupportedByTheScript(contentType)
 function onShowDefaultPageRequest(request, response)
 {
 	var ip = request.headers['x-forwarded-for'] || request.connection.remoteAddress;
-	var defaultPage = appLocation + "default.html";
+	console.log(" >> Default page request. Replying back with the default page. (RemoteEndpoint='" + ip + "')");
 
 	response.sendFile(defaultPage);
-
-	console.log(" >> Default page request. Replying back with the default page. (RemoteEndpoint='" + ip + "')");
 }
 
 function onGetSupportedGraphList(request, response)
@@ -336,15 +347,10 @@ function GraphGenerator(response)
 
 			exec("java -jar " + ditaaJarLocation + " " + inputFileName + " " + outputFileName, OnGraphGenerated);
 		}
-		else if (contentType == "actdiag" ||
-			     contentType == "nwdiag" ||
-				 contentType == "blockdiag" ||
-				 contentType == "seqdiag" ||
-				 contentType == "packetdiag" ||
-				 contentType == "rackdiag")
+		else if (contentType in diagtoolLocations)
 		{
 			var toolName = contentType;
-			var toolLocation = diagToolLocation.replace("[TOOL_NAME]", toolName);
+			var toolLocation = diagtoolLocations[toolName];
 
 			if (fs.existsSync(toolLocation) == false)
                         {
@@ -372,8 +378,10 @@ function GraphGenerator(response)
 		}
 	}
 
-	var OnGraphGenerated = function()
+	var OnGraphGenerated = function(error, stdout, stderr)
 	{
+		console.log("stdout=" + stdout);
+		console.log("stderr=" + stderr);
 		console.log(" >> The " + self._contentType + " binary has processed the received content. Checking whether the expected output is available.");
 
 		try
