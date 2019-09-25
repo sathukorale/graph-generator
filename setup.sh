@@ -28,6 +28,7 @@ DEPENDENCY_packetdiagBinary=""
 DEPENDENCY_rackdiagBinary=""
 DEPENDENCY_zlibDirectory=""
 DEPENDENCY_libjpegDirectory=""
+DEPENDENCY_blockdiagAppDir=""
 
 function GenerateDepedenciesJs()
 {
@@ -86,6 +87,9 @@ function GenerateStartScript()
 {
     Log "Generating the Start Script..."
     
+    suggestedPackageSite="$blockDiagAppDir/lib/python${pythonVersion}/site-packages"
+    defaultPackageSite=`python -m site --user-site 2>/dev/null`
+    
     echo -e "#!/bin/bash" >> "$appDirectory/start.sh"
     echo -e "" >> "$appDirectory/start.sh"
     echo -e "export LD_LIBRARY_PATH=\"$DEPENDENCY_graphvizDirectory/lib:\$LD_LIBRARY_PATH\"" >> "$appDirectory/start.sh"
@@ -108,6 +112,10 @@ function GenerateStartScript()
     echo -e "\techo \"Looks like the GraphGenerator server isn't setup properly. Please run the 'setup.sh' script to do the initial setup.\"" >> "$appDirectory/start.sh"
     echo -e "\treturn" >> "$appDirectory/start.sh"
     echo -e "fi" >> "$appDirectory/start.sh"
+    echo -e "" >> "$appDirectory/start.sh"
+    echo -e "export PYTHONPATH=\"$suggestedPackageSite:$defaultPackageSite:\$PYTHONPATH\"" >> "$appDirectory/start.sh"
+    echo -e "" >> "$appDirectory/start.sh"
+    echo -e "$DEPENDENCY_graphvizDirectory/bin/dot -c > /dev/null 2>&1 # Just in case" >> "$appDirectory/start.sh"
     echo -e "" >> "$appDirectory/start.sh"
     echo -e "screen -dm bash -c \"node --max-http-header-size=80000 index.js\" -S nodejs-graph-generator" >> "$appDirectory/start.sh"
     

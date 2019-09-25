@@ -10,6 +10,8 @@ function SetupBlockdiagTools()
     blockDiagAppDir=`CreateDependencySubDir "blockdiag-tools"`
     pythonVersion=`python -c "import sys; print('%d.%d' % (sys.version_info.major, sys.version_info.minor));" 2>/dev/null`
     
+    export DEPENDENCY_blockdiagAppDir="$blockDiagAppDir"
+    
     suggestedPackageSite="$blockDiagAppDir/lib/python${pythonVersion}/site-packages"
     defaultPackageSite=`python -m site --user-site 2>/dev/null`
     
