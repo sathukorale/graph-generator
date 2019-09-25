@@ -225,8 +225,8 @@ function GraphGenerator(response)
 		console.log(" >> Checking whether an already generated graph exists for these details. (Url=" + self._scriptLocation + ")");
 
 		var uniqueName = GetTimeInNanoseconds();
-		var inputFileName = appTmpDataDirectory + uniqueName + "_input.script";
-		var outputFileName = appDataDirectory + uniqueName + "_output.png";
+		var inputFileName = path.join(appTmpDataDirectory, uniqueName + "_input.script");
+		var outputFileName = path.join(appDataDirectory, uniqueName + "_output.png");
 
 		var updatedScriptContent = scriptContent;
 		if (IsSupportedByAsciiDoctor(self._contentType))
@@ -248,7 +248,7 @@ function GraphGenerator(response)
 		shasum.update(Buffer.from(self._scriptLocation, 'utf8'));
 		var checksumOfLocation = shasum.digest("hex");
 
-		var recordFile = appDataDirectory + self._contentType + "_" + checksumOfLocation.toString().replace("+", "_").replace("/", "-") + ".recordfile";
+		var recordFile = path.join(appDataDirectory, self._contentType + "_" + checksumOfLocation.toString().replace("+", "_").replace("/", "-") + ".recordfile");
 
 		if (fs.existsSync(recordFile))
 		{
@@ -432,8 +432,8 @@ function GraphGenerator(response)
 
 		var checksum = contentType + "_" + shasum.digest("hex");
 		var uniqueName = GetTimeInNanoseconds();
-		var inputFileName = appTmpDataDirectory + uniqueName + "_input.script";
-		var outputFileName = appDataDirectory + uniqueName + "_output.png";
+		var inputFileName = path.join(appTmpDataDirectory, uniqueName + "_input.script");
+		var outputFileName = path.join(appDataDirectory, uniqueName + "_output.png");
 
 		console.log(" >> Checking whether a generated graph exists for the same details. (ContentHash='" + checksum + "')");
 		
