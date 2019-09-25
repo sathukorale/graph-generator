@@ -39,12 +39,19 @@ function InstallBlockdiagTool()
 	binaryLocation=`which "$toolName" 2>/dev/null`
 	if [ $? -eq 0 ]; then
 		Log "     ﹂ '$toolName' is already installed into '$binaryLocation'. The script will continue with this installation."
+        export "DEPENDENCY_${toolName}Binary"="$binaryLocation"
 		return
 	fi
 
 	Log " ﹂ Attempting to install '$toolName' into '$blockDiagAppDir'."
 	
-	pip install --system --prefix=$blockDiagAppDir "$toolName" > /dev/null 2>&1
+	if [ ! -z "`pip --help 2>/dev/null | grep "\--system "`" ]
+	then 
+	    pip install --system --prefix=$blockDiagAppDir "$toolName" > /dev/null 2>&1
+    else
+	    pip install --prefix=$blockDiagAppDir "$toolName" > /dev/null 2>&1
+    fi 
+    
 	if [ $? -ne 0 ]; then
 		Log "     ﹂ Failed to install '$toolName'. Please try installing '$toolName' manually."
 		exit 1

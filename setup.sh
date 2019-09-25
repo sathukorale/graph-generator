@@ -31,61 +31,65 @@ DEPENDENCY_libjpegDirectory=""
 
 function GenerateDepedenciesJs()
 {
-    echo "const graphvizBinary = '$DEPENDENCY_graphvizDirectory/bin/dot';" > "$appDirectory/depdendencies.js"
-    echo "const plantumlBinary = '$DEPENDENCY_plantumlBinary';" >> "$appDirectory/depdendencies.js"
-    echo "const mermaidBinary = '$DEPENDENCY_mermaidBinary';" >> "$appDirectory/depdendencies.js"
-    echo "const ditaaBinary = '$DEPENDENCY_ditaaBinary';" >> "$appDirectory/depdendencies.js"
-    echo "const actdiagBinary = '$DEPENDENCY_actdiagBinary';" >> "$appDirectory/depdendencies.js"
-    echo "const nwdiagBinary = '$DEPENDENCY_nwdiagBinary';" >> "$appDirectory/depdendencies.js"
-    echo "const blockdiagBinary = '$DEPENDENCY_blockdiagBinary';" >> "$appDirectory/depdendencies.js"
-    echo "const seqdiagBinary = '$DEPENDENCY_seqdiagBinary';" >> "$appDirectory/depdendencies.js"
-    echo "const packetdiagBinary = '$DEPENDENCY_packetdiagBinary';" >> "$appDirectory/depdendencies.js"
-    echo "const rackdiagBinary = '$DEPENDENCY_rackdiagBinary';" >> "$appDirectory/depdendencies.js"
-    echo "" >> "$appDirectory/depdendencies.js"
-    echo "const blockdiagTools = {};" >> "$appDirectory/depdendencies.js"
-    echo "blockdiagTools['actdiag'] = actdiagBinary;" >> "$appDirectory/dependencies.js"
-    echo "blockdiagTools['nwdiag'] = nwdiagBinary;" >> "$appDirectory/dependencies.js"
-    echo "blockdiagTools['blockdiag'] = blockdiagBinary;" >> "$appDirectory/dependencies.js"
-    echo "blockdiagTools['seqdiag'] = seqdiagBinary;" >> "$appDirectory/dependencies.js"
-    echo "blockdiagTools['packetdiag'] = packetdiagBinary;" >> "$appDirectory/dependencies.js"
-    echo "blockdiagTools['rackdiag'] = rackdiagBinary;" >> "$appDirectory/dependencies.js"
-    echo "" >> "$appDirectory/depdendencies.js"
-    echo "function PrintDependencyLocations()" >> "$appDirectory/depdendencies.js"
-    echo "{" >> "$appDirectory/depdendencies.js"
-    echo "\tconsole.log(\"* Graphviz Binary Path = '\" + graphvizBinary + \"'\");" >> "$appDirectory/depdendencies.js"
-    echo "\tconsole.log(\"* Plantuml Binary Path = '\" + plantumlBinary + \"'\");" >> "$appDirectory/depdendencies.js"
-    echo "\tconsole.log(\"* Mermaid Binary Path = '\" + mermaidBinary + \"'\");" >> "$appDirectory/depdendencies.js"
-    echo "\tconsole.log(\"* Ditaa Binary Path = '\" + ditaaBinary + \"'\");" >> "$appDirectory/depdendencies.js"
-    echo "\tconsole.log(\"* Actdiag Binary Path = '\" + actdiagBinary + \"'\");" >> "$appDirectory/depdendencies.js"
-    echo "\tconsole.log(\"* Nwdiag Binary Path = '\" + nwdiagBinary + \"'\");" >> "$appDirectory/depdendencies.js"
-    echo "\tconsole.log(\"* Blockdiag Binary Path = '\" + blockdiagBinary + \"'\");" >> "$appDirectory/depdendencies.js"
-    echo "\tconsole.log(\"* Seqdiag Binary Path = '\" + seqdiagBinary + \"'\");" >> "$appDirectory/depdendencies.js"
-    echo "\tconsole.log(\"* Packetdiag Binary Path = '\" + packetdiagBinary + \"'\");" >> "$appDirectory/depdendencies.js"
-    echo "\tconsole.log(\"* Rackdiag Binary Path = '\" + rackdiagBinary + \"'\");" >> "$appDirectory/depdendencies.js"
-    echo "}" >> "$appDirectory/depdendencies.js"
+    Log "Generating the Dependencies JS File..."
+    
+    echo -e "const graphvizBinary = '$DEPENDENCY_graphvizDirectory/bin/dot';" > "$appDirectory/dependencies.js"
+    echo -e "const plantumlBinary = '$DEPENDENCY_plantumlBinary';" >> "$appDirectory/dependencies.js"
+    echo -e "const mermaidBinary = '$DEPENDENCY_mermaidBinary';" >> "$appDirectory/dependencies.js"
+    echo -e "const ditaaBinary = '$DEPENDENCY_ditaaBinary';" >> "$appDirectory/dependencies.js"
+    echo -e "const actdiagBinary = '$DEPENDENCY_actdiagBinary';" >> "$appDirectory/dependencies.js"
+    echo -e "const nwdiagBinary = '$DEPENDENCY_nwdiagBinary';" >> "$appDirectory/dependencies.js"
+    echo -e "const blockdiagBinary = '$DEPENDENCY_blockdiagBinary';" >> "$appDirectory/dependencies.js"
+    echo -e "const seqdiagBinary = '$DEPENDENCY_seqdiagBinary';" >> "$appDirectory/dependencies.js"
+    echo -e "const packetdiagBinary = '$DEPENDENCY_packetdiagBinary';" >> "$appDirectory/dependencies.js"
+    echo -e "const rackdiagBinary = '$DEPENDENCY_rackdiagBinary';" >> "$appDirectory/dependencies.js"
+    echo -e "" >> "$appDirectory/dependencies.js"
+    echo -e "const blockdiagTools = {};" >> "$appDirectory/dependencies.js"
+    echo -e "blockdiagTools['actdiag'] = actdiagBinary;" >> "$appDirectory/dependencies.js"
+    echo -e "blockdiagTools['nwdiag'] = nwdiagBinary;" >> "$appDirectory/dependencies.js"
+    echo -e "blockdiagTools['blockdiag'] = blockdiagBinary;" >> "$appDirectory/dependencies.js"
+    echo -e "blockdiagTools['seqdiag'] = seqdiagBinary;" >> "$appDirectory/dependencies.js"
+    echo -e "blockdiagTools['packetdiag'] = packetdiagBinary;" >> "$appDirectory/dependencies.js"
+    echo -e "blockdiagTools['rackdiag'] = rackdiagBinary;" >> "$appDirectory/dependencies.js"
+    echo -e "" >> "$appDirectory/dependencies.js"
+    echo -e "function PrintDependencyLocations()" >> "$appDirectory/dependencies.js"
+    echo -e "{" >> "$appDirectory/dependencies.js"
+    echo -e "\tconsole.log(\"* Graphviz Binary Path = '\" + graphvizBinary + \"'\");" >> "$appDirectory/dependencies.js"
+    echo -e "\tconsole.log(\"* Plantuml Binary Path = '\" + plantumlBinary + \"'\");" >> "$appDirectory/dependencies.js"
+    echo -e "\tconsole.log(\"* Mermaid Binary Path = '\" + mermaidBinary + \"'\");" >> "$appDirectory/dependencies.js"
+    echo -e "\tconsole.log(\"* Ditaa Binary Path = '\" + ditaaBinary + \"'\");" >> "$appDirectory/dependencies.js"
+    echo -e "\tconsole.log(\"* Actdiag Binary Path = '\" + actdiagBinary + \"'\");" >> "$appDirectory/dependencies.js"
+    echo -e "\tconsole.log(\"* Nwdiag Binary Path = '\" + nwdiagBinary + \"'\");" >> "$appDirectory/dependencies.js"
+    echo -e "\tconsole.log(\"* Blockdiag Binary Path = '\" + blockdiagBinary + \"'\");" >> "$appDirectory/dependencies.js"
+    echo -e "\tconsole.log(\"* Seqdiag Binary Path = '\" + seqdiagBinary + \"'\");" >> "$appDirectory/dependencies.js"
+    echo -e "\tconsole.log(\"* Packetdiag Binary Path = '\" + packetdiagBinary + \"'\");" >> "$appDirectory/dependencies.js"
+    echo -e "\tconsole.log(\"* Rackdiag Binary Path = '\" + rackdiagBinary + \"'\");" >> "$appDirectory/dependencies.js"
+    echo -e "}" >> "$appDirectory/dependencies.js"
     
 }
 
 function GenerateStartScript()
 {
-    echo "#!/bin/bash" > "$appDirectory/start.sh"
-    echo "" >> "$appDirectory/start.sh"
-    echo "export LD_LIBRARY_PATH=\"$DEPENDENCY_graphvizDirectory/lib:$LD_LIBRARY_PATH\"" >> "$appDirectory/start.sh"
-    echo "export LD_LIBRARY_PATH_64=\"$DEPENDENCY_graphvizDirectory/lib:$LD_LIBRARY_PATH_64\"" >> "$appDirectory/start.sh"
-    echo "" >> "$appDirectory/start.sh"
-    echo "export LD_LIBRARY_PATH=\"$DEPENDENCY_libgdDirectory/lib:$LD_LIBRARY_PATH\"" >> "$appDirectory/start.sh"
-    echo "export LD_LIBRARY_PATH_64=\"$DEPENDENCY_libgdDirectory/lib:$LD_LIBRARY_PATH_64\"" >> "$appDirectory/start.sh"
-    echo "" >> "$appDirectory/start.sh"
-    echo "export LD_LIBRARY_PATH=\"$DEPENDENCY_libjpegDirectory/lib:$LD_LIBRARY_PATH\"" >> "$appDirectory/start.sh"
-    echo "export LD_LIBRARY_PATH_64=\"$DEPENDENCY_libjpegDirectory/lib:$LD_LIBRARY_PATH_64\"" >> "$appDirectory/start.sh"
-    echo "" >> "$appDirectory/start.sh"
-    echo "export LD_LIBRARY_PATH=\"$DEPENDENCY_libpngDirectory/lib:$LD_LIBRARY_PATH\"" >> "$appDirectory/start.sh"
-    echo "export LD_LIBRARY_PATH_64=\"$DEPENDENCY_libpngDirectory/lib:$LD_LIBRARY_PATH_64\"" >> "$appDirectory/start.sh"
-    echo "" >> "$appDirectory/start.sh"
-    echo "export LD_LIBRARY_PATH=\"$DEPENDENCY_zlibDirectory/lib:$LD_LIBRARY_PATH\"" >> "$appDirectory/start.sh"
-    echo "export LD_LIBRARY_PATH_64=\"$DEPENDENCY_zlibDirectory/lib:$LD_LIBRARY_PATH_64\"" >> "$appDirectory/start.sh"
-    echo "" >> "$appDirectory/start.sh"
-    echo "screen -dm bash -c \" node --max-http-header-size=80000 index.js\" -S nodejs-graph-generator" >> "$appDirectory/start.sh"
+    Log "Generating the Start Script..."
+    
+    echo -e "#!/bin/bash" > "$appDirectory/start.sh"
+    echo -e "" >> "$appDirectory/start.sh"
+    echo -e "export LD_LIBRARY_PATH=\"$DEPENDENCY_graphvizDirectory/lib:\$LD_LIBRARY_PATH\"" >> "$appDirectory/start.sh"
+    echo -e "export LD_LIBRARY_PATH_64=\"$DEPENDENCY_graphvizDirectory/lib:\$LD_LIBRARY_PATH_64\"" >> "$appDirectory/start.sh"
+    echo -e "" >> "$appDirectory/start.sh"
+    echo -e "export LD_LIBRARY_PATH=\"$DEPENDENCY_libgdDirectory/lib:\$LD_LIBRARY_PATH\"" >> "$appDirectory/start.sh"
+    echo -e "export LD_LIBRARY_PATH_64=\"$DEPENDENCY_libgdDirectory/lib:\$LD_LIBRARY_PATH_64\"" >> "$appDirectory/start.sh"
+    echo -e "" >> "$appDirectory/start.sh"
+    echo -e "export LD_LIBRARY_PATH=\"$DEPENDENCY_libjpegDirectory/lib:\$LD_LIBRARY_PATH\"" >> "$appDirectory/start.sh"
+    echo -e "export LD_LIBRARY_PATH_64=\"$DEPENDENCY_libjpegDirectory/lib:\$LD_LIBRARY_PATH_64\"" >> "$appDirectory/start.sh"
+    echo -e "" >> "$appDirectory/start.sh"
+    echo -e "export LD_LIBRARY_PATH=\"$DEPENDENCY_libpngDirectory/lib:\$LD_LIBRARY_PATH\"" >> "$appDirectory/start.sh"
+    echo -e "export LD_LIBRARY_PATH_64=\"$DEPENDENCY_libpngDirectory/lib:\$LD_LIBRARY_PATH_64\"" >> "$appDirectory/start.sh"
+    echo -e "" >> "$appDirectory/start.sh"
+    echo -e "export LD_LIBRARY_PATH=\"$DEPENDENCY_zlibDirectory/lib:\$LD_LIBRARY_PATH\"" >> "$appDirectory/start.sh"
+    echo -e "export LD_LIBRARY_PATH_64=\"$DEPENDENCY_zlibDirectory/lib:\$LD_LIBRARY_PATH_64\"" >> "$appDirectory/start.sh"
+    echo -e "" >> "$appDirectory/start.sh"
+    echo -e "screen -dm bash -c \" node --max-http-header-size=80000 index.js\" -S nodejs-graph-generator" >> "$appDirectory/start.sh"
 }
 
 function Setup()
@@ -94,6 +98,12 @@ function Setup()
     Log "* Plugin Directory = '$pluginDirectory'"
     Log "* Temp Directory = '$temporaryDirectory'"
     Log ""
+    
+    if [ -f "$appDirectory/depdendencies.js" ] && [ -f "$appDirectory/start.sh" ]
+    then
+        echo "Looks like the server is already setup. If you think that there is an issue with the configuration or want to reset the setup, please delete the '$appDirectory/depdendencies.js' and the '$appDirectory/start.sh' and re-run the script."
+        exit 0
+    fi
 
     CleanTempDir
     CleanDependencyDirectory
@@ -127,6 +137,9 @@ function Setup()
     
     GenerateDepedenciesJs
     GenerateStartScript
+    
+    echo ""
+    echo "Process completed. Please use the generated 'start.sh' File to Start the GraphGenerator Server."
 }
 
 Setup

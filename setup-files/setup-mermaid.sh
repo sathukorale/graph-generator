@@ -12,6 +12,7 @@ function SetupMermaid()
     if [ -f "$mermaidBinaryLocation" ]
     then
         Log "     ﹂ 'Mermaid' is already installed. The app will continue with this installation."
+        export DEPENDENCY_mermaidBinary="$mermaidBinaryLocation"
         return
     fi
     
