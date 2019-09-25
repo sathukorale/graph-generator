@@ -61,4 +61,7 @@ function SetupZlib()
     Log " ﹂ zlib was compiled and install into '$zlibAppDirectory'."
 
     export DEPENDENCY_zlibDirectory="$zlibAppDirectory"
+
+    export CPPFLAGS="-I$DEPENDENCY_zlibDirectory/include $CPPFLAGS"
+    export LDFLAGS="-L$DEPENDENCY_zlibDirectory/lib $CPPFLAGS"
 }

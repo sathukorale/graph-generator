@@ -337,11 +337,11 @@ function GraphGenerator(response)
 			exec("java -jar " + ditaaJarLocation + " " + inputFileName + " " + outputFileName, OnGraphGenerated);
 		}
 		else if (contentType == "actdiag" ||
-			 contentType == "nwdiag" ||
-			 contentType == "blockdiag" ||
-			 contentType == "seqdiag" ||
-			 contentType == "packetdiag" ||
-			 contentType == "rackdiag")
+			     contentType == "nwdiag" ||
+				 contentType == "blockdiag" ||
+				 contentType == "seqdiag" ||
+				 contentType == "packetdiag" ||
+				 contentType == "rackdiag")
 		{
 			var toolName = contentType;
 			var toolLocation = diagToolLocation.replace("[TOOL_NAME]", toolName);

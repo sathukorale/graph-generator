@@ -21,5 +21,5 @@ function SetupDitaa()
         exit 1
     fi
 
-    export DEPENDENCY_DitaaBinary="$downloadFilePath"
+    export DEPENDENCY_ditaaBinary="$downloadFilePath"
 }

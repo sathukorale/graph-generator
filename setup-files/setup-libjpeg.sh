@@ -61,4 +61,7 @@ function SetupLibjpeg()
     Log " ﹂ libjpeg was compiled and install into '$libjpegAppDirectory'."
 
     export DEPENDENCY_libjpegDirectory="$libjpegAppDirectory"
+
+    export CPPFLAGS="-I$DEPENDENCY_libjpegDirectory/include $CPPFLAGS"
+    export LDFLAGS="-L$DEPENDENCY_libjpegDirectory/lib $CPPFLAGS"
 }

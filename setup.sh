@@ -19,7 +19,7 @@ DEPENDENCY_graphvizDirectory=""
 DEPENDENCY_libpngDirectory=""
 DEPENDENCY_plantumlBinary=""
 DEPENDENCY_mermaidBinary=""
-DEPENDENCY_DitaaBinary=""
+DEPENDENCY_ditaaBinary=""
 DEPENDENCY_actdiagBinary=""
 DEPENDENCY_nwdiagBinary=""
 DEPENDENCY_blockdiagBinary=""
@@ -28,6 +28,43 @@ DEPENDENCY_packetdiagBinary=""
 DEPENDENCY_rackdiagBinary=""
 DEPENDENCY_zlibDirectory=""
 DEPENDENCY_libjpegDirectory=""
+
+function GenerateDepedenciesJs()
+{
+    echo "const graphvizBinary = '$DEPENDENCY_graphvizDirectory/bin/dot';" > "$appDirectory/depdendencies.js"
+    echo "const plantumlBinary = '$DEPENDENCY_plantumlBinary';" >> "$appDirectory/depdendencies.js"
+    echo "const mermaidBinary = '$DEPENDENCY_mermaidBinary';" >> "$appDirectory/depdendencies.js"
+    echo "const ditaaBinary = '$DEPENDENCY_ditaaBinary';" >> "$appDirectory/depdendencies.js"
+    echo "const actdiagBinary = '$DEPENDENCY_actdiagBinary';" >> "$appDirectory/depdendencies.js"
+    echo "const nwdiagBinary = '$DEPENDENCY_nwdiagBinary';" >> "$appDirectory/depdendencies.js"
+    echo "const blockdiagBinary = '$DEPENDENCY_blockdiagBinary';" >> "$appDirectory/depdendencies.js"
+    echo "const seqdiagBinary = '$DEPENDENCY_seqdiagBinary';" >> "$appDirectory/depdendencies.js"
+    echo "const packetdiagBinary = '$DEPENDENCY_packetdiagBinary';" >> "$appDirectory/depdendencies.js"
+    echo "const rackdiagBinary = '$DEPENDENCY_rackdiagBinary';" >> "$appDirectory/depdendencies.js"
+    echo "" >> "$appDirectory/depdendencies.js"
+    echo "const blockdiagTools = {};" >> "$appDirectory/depdendencies.js"
+    echo "blockdiagTools['actdiag'] = actdiagBinary;" >> "$appDirectory/dependencies.js"
+    echo "blockdiagTools['nwdiag'] = nwdiagBinary;" >> "$appDirectory/dependencies.js"
+    echo "blockdiagTools['blockdiag'] = blockdiagBinary;" >> "$appDirectory/dependencies.js"
+    echo "blockdiagTools['seqdiag'] = seqdiagBinary;" >> "$appDirectory/dependencies.js"
+    echo "blockdiagTools['packetdiag'] = packetdiagBinary;" >> "$appDirectory/dependencies.js"
+    echo "blockdiagTools['rackdiag'] = rackdiagBinary;" >> "$appDirectory/dependencies.js"
+    echo "" >> "$appDirectory/depdendencies.js"
+    echo "function PrintDependencyLocations()" >> "$appDirectory/depdendencies.js"
+    echo "{" >> "$appDirectory/depdendencies.js"
+    echo "\tconsole.log(\"* Graphviz Binary Path = '\" + graphvizBinary + \"'\");" >> "$appDirectory/depdendencies.js"
+    echo "\tconsole.log(\"* Plantuml Binary Path = '\" + plantumlBinary + \"'\");" >> "$appDirectory/depdendencies.js"
+    echo "\tconsole.log(\"* Mermaid Binary Path = '\" + mermaidBinary + \"'\");" >> "$appDirectory/depdendencies.js"
+    echo "\tconsole.log(\"* Ditaa Binary Path = '\" + ditaaBinary + \"'\");" >> "$appDirectory/depdendencies.js"
+    echo "\tconsole.log(\"* Actdiag Binary Path = '\" + actdiagBinary + \"'\");" >> "$appDirectory/depdendencies.js"
+    echo "\tconsole.log(\"* Nwdiag Binary Path = '\" + nwdiagBinary + \"'\");" >> "$appDirectory/depdendencies.js"
+    echo "\tconsole.log(\"* Blockdiag Binary Path = '\" + blockdiagBinary + \"'\");" >> "$appDirectory/depdendencies.js"
+    echo "\tconsole.log(\"* Seqdiag Binary Path = '\" + seqdiagBinary + \"'\");" >> "$appDirectory/depdendencies.js"
+    echo "\tconsole.log(\"* Packetdiag Binary Path = '\" + packetdiagBinary + \"'\");" >> "$appDirectory/depdendencies.js"
+    echo "\tconsole.log(\"* Rackdiag Binary Path = '\" + rackdiagBinary + \"'\");" >> "$appDirectory/depdendencies.js"
+    echo "}" >> "$appDirectory/depdendencies.js"
+    
+}
 
 function Setup()
 {
@@ -38,6 +75,9 @@ function Setup()
 
     CleanTempDir
     CleanDependencyDirectory
+
+    SetupZlib
+    Log ""
 
     SetupLibpng
     Log ""
@@ -59,11 +99,11 @@ function Setup()
 
     SetupDitaa
     Log ""
-
-    SetupZlib
-    Log ""
     
     SetupBlockdiagTools
+    Log ""
+    
+    GenerateDepedenciesJs
 }
 
 Setup

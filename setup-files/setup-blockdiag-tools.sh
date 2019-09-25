@@ -18,9 +18,7 @@ function SetupBlockdiagTools()
     
     Log " ﹂ Installing 'webcolors' which is required by blockdiag binaries..."
 	pip install --system --prefix=$blockDiagAppDir "webcolors" > /dev/null 2>&1
-
-    export CPPFLAGS="-I$DEPENDENCY_zlibDirectory/include -I$DEPENDENCY_libjpegDirectory/include $CPPFLAGS"
-    export LDFLAGS="-L$DEPENDENCY_zlibDirectory/lib -L$DEPENDENCY_libjpegDirectory/lib $CPPFLAGS"
+	
     export PATH="$blockDiagAppDir/bin:$PATH"
     
     InstallBlockdiagTool "actdiag"
