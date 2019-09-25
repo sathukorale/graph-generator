@@ -310,9 +310,9 @@ function GraphGenerator(response)
 			{
 				console.log(" >> The required PlantUML plugin was not found at, '" + plantUmlJarLocation + "'. This is indicative of a server-side error.");
 
-	                        self._response.status(500);
-	                        self._response.send("Couldn't locate the required plantuml plugin.");
-	                        return;
+				self._response.status(500);
+				self._response.send("Couldn't locate the required plantuml plugin.");
+				return;
 			}
 
 			exec("cat " + inputFileName + " | java -jar " + plantUmlJarLocation + " -DPLANTUML_LIMIT_SIZE=16384 -pipe > " + outputFileName, OnGraphGenerated);
@@ -324,26 +324,26 @@ function GraphGenerator(response)
 		else if (contentType == "mermaid")
 		{
 			if (fs.existsSync(mermaidBinaryLocation) == false)
-                        {
-                                console.log(" >> The required 'mmdc' (Mermaid Cli) binary was not found at, '" + mermaidBinaryLocation + "'. This is indicative of a server-side error.");
-
-                                self._response.status(500);
-                                self._response.send("Couldn't locate the required 'mmdc' binary.");
-                                return;
-                        }
+            {
+				console.log(" >> The required 'mmdc' (Mermaid Cli) binary was not found at, '" + mermaidBinaryLocation + "'. This is indicative of a server-side error.");
+				
+				self._response.status(500);
+				self._response.send("Couldn't locate the required 'mmdc' binary.");
+				return;
+            }
 
 			exec(mermaidBinaryLocation + " --puppeteerConfigFile=" + puppeteerConfigLocation + " --input " + inputFileName + " --output " + outputFileName, OnGraphGenerated);
 		}
 		else if (contentType == "ditaa")
 		{
 			if (fs.existsSync(ditaaJarLocation) == false)
-                        {
-                                console.log(" >> The required 'ditaa.jar' binary was not found at, '" + ditaaJarLocation + "'. This is indicative of a server-side error.");
-
-                                self._response.status(500);
-                                self._response.send("Couldn't locate the required 'ditaa.jar' binary.");
-                                return;
-                        }
+			{
+				console.log(" >> The required 'ditaa.jar' binary was not found at, '" + ditaaJarLocation + "'. This is indicative of a server-side error.");
+				
+				self._response.status(500);
+				self._response.send("Couldn't locate the required 'ditaa.jar' binary.");
+				return;
+			}
 
 			exec("java -jar " + ditaaJarLocation + " " + inputFileName + " " + outputFileName, OnGraphGenerated);
 		}
@@ -353,13 +353,13 @@ function GraphGenerator(response)
 			var toolLocation = diagtoolLocations[toolName];
 
 			if (fs.existsSync(toolLocation) == false)
-                        {
-                                console.log(" >> The required '" + toolName + "' binary was not found at, '" + toolLocation + "'. This is indicative of a server-side error.");
-
-                                self._response.status(500);
-                                self._response.send("Couldn't locate the required '" + toolName + "' binary.");
-                                return;
-                        }
+			{
+			    console.log(" >> The required '" + toolName + "' binary was not found at, '" + toolLocation + "'. This is indicative of a server-side error.");
+			
+			    self._response.status(500);
+			    self._response.send("Couldn't locate the required '" + toolName + "' binary.");
+			    return;
+			}
 
 			exec(toolLocation + " \"" + inputFileName + "\" -o \"" + outputFileName + "\"", OnGraphGenerated);
 		}
@@ -369,9 +369,9 @@ function GraphGenerator(response)
 			{
 				console.log(" >> The required 'asciidoctor' binary was not found at, '" + asciiDoctorLocation + "'. This is indicative of a server-side error.");
 
-                                self._response.status(500);
-                                self._response.send("Couldn't locate the required asciidoctor binary.");
-                                return;
+                self._response.status(500);
+                self._response.send("Couldn't locate the required asciidoctor binary.");
+                return;
 			}
 		
 			exec(asciiDoctorLocation + " -r asciidoctor-diagram \"" + inputFileName + "\" --destination-dir=" + appDataDirectory, OnGraphGenerated);
