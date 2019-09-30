@@ -6,6 +6,7 @@ source "$appDirectory/setup-files/utilities.sh"
 
 source "$appDirectory/setup-files/setup-libpng.sh"
 source "$appDirectory/setup-files/setup-libgd.sh"
+source "$appDirectory/setup-files/setup-libexpat.sh"
 source "$appDirectory/setup-files/setup-graphviz.sh"
 source "$appDirectory/setup-files/setup-plantuml.sh"
 source "$appDirectory/setup-files/setup-mermaid.sh"
@@ -29,6 +30,7 @@ DEPENDENCY_rackdiagBinary=""
 DEPENDENCY_zlibDirectory=""
 DEPENDENCY_libjpegDirectory=""
 DEPENDENCY_blockdiagAppDir=""
+DEPENDENCY_libexpatDirectory=""
 
 function GenerateDepedenciesJs()
 {
@@ -95,6 +97,9 @@ function GenerateStartScript()
     echo -e "export LD_LIBRARY_PATH=\"$DEPENDENCY_graphvizDirectory/lib:\$LD_LIBRARY_PATH\"" >> "$appDirectory/start.sh"
     echo -e "export LD_LIBRARY_PATH_64=\"$DEPENDENCY_graphvizDirectory/lib:\$LD_LIBRARY_PATH_64\"" >> "$appDirectory/start.sh"
     echo -e "" >> "$appDirectory/start.sh"
+    echo -e "export LD_LIBRARY_PATH=\"$DEPENDENCY_libexpatDirectory/lib:\$LD_LIBRARY_PATH\"" >> "$appDirectory/start.sh"
+    echo -e "export LD_LIBRARY_PATH_64=\"$DEPENDENCY_libexpatDirectory/lib:\$LD_LIBRARY_PATH_64\"" >> "$appDirectory/start.sh"
+    echo -e "" >> "$appDirectory/start.sh"
     echo -e "export LD_LIBRARY_PATH=\"$DEPENDENCY_libgdDirectory/lib:\$LD_LIBRARY_PATH\"" >> "$appDirectory/start.sh"
     echo -e "export LD_LIBRARY_PATH_64=\"$DEPENDENCY_libgdDirectory/lib:\$LD_LIBRARY_PATH_64\"" >> "$appDirectory/start.sh"
     echo -e "" >> "$appDirectory/start.sh"
@@ -125,7 +130,7 @@ function GenerateStartScript()
 function Setup()
 {
     Log "* AppDirectory = '$appDirectory'"
-    Log "* Plugin Directory = '$pluginDirectory'"
+    Log "* Dependency Directory = '$dependencyDirectory'"
     Log "* Temp Directory = '$temporaryDirectory'"
     Log ""
     
@@ -145,6 +150,9 @@ function Setup()
     Log ""
 
     SetupLibjpeg
+    Log ""
+
+    SetupLibexpat
     Log ""
 
     SetupLibgd

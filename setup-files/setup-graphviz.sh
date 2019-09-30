@@ -38,7 +38,7 @@ function SetupDot()
     cd "$graphvizDirectory"
 
     Log " ﹂ Attempting to compile Graphviz."
-    ./configure --prefix="$graphvizAppDirectory" --with-libgd=yes --with-gdincludedir="$DEPENDENCY_libgdDirectory/include" --with-gdlibdir="$DEPENDENCY_libgdDirectory/lib" --with-zincludedir="$DEPENDENCY_zlibDirectory/include" --with-zlibdir="$DEPENDENCY_zlibDirectory/lib" > /dev/null 2>&1
+    ./configure --prefix="$graphvizAppDirectory" --with-libgd=yes --with-gdincludedir="$DEPENDENCY_libgdDirectory/include" --with-gdlibdir="$DEPENDENCY_libgdDirectory/lib" --with-zincludedir="$DEPENDENCY_zlibDirectory/include" --with-zlibdir="$DEPENDENCY_zlibDirectory/lib" --with-expat=yes --with-expatincludedir="$DEPENDENCY_libexpatDirectory/include" --with-expatlibdir="$DEPENDENCY_libexpatDirectory/lib" > /dev/null 2>&1
     if [[ $? -ne 0 ]]
     then
         Log "     ﹂ Failed to configure. Please try manually configuring '$graphvizDirectory'."
