@@ -88,6 +88,16 @@ function GenerateDepedenciesJs()
     echo -e "}" >> "$appDirectory/dependencies.js"
     echo -e "" >> "$appDirectory/dependencies.js"
     echo -e "module.exports = {" >> "$appDirectory/dependencies.js"
+    echo -e "\tserverHostname," >> "$appDirectory/dependencies.js"
+    echo -e "\tserverPortNumber," >> "$appDirectory/dependencies.js"
+    echo -e "\tauthenticatedDownloadsEnabled," >> "$appDirectory/dependencies.js"
+    
+    if [[ "$authenticatedDownloadsEnabled" == "true" ]]
+    then
+        echo -e "\tauthenticationDetailsUsername," >> "$appDirectory/dependencies.js"
+        echo -e "\tauthenticationDetailsPassword," >> "$appDirectory/dependencies.js"
+    fi
+    
     echo -e "\tgraphvizBinary," >> "$appDirectory/dependencies.js"
     echo -e "\tplantumlBinary," >> "$appDirectory/dependencies.js"
     echo -e "\tmermaidBinary," >> "$appDirectory/dependencies.js"
