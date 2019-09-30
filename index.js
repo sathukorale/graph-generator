@@ -30,12 +30,12 @@ const puppeteerConfigLocation = path.join(appResourcesDirectory, "puppeteer-conf
 
 const scriptContentRecordsFilePath = path.join(appDataDirectory, "contentrequests.recordfile");
 
-const stashAccessibleUserName = "mmd_ciuser";
-const stashAccessibleUserPasswd = "mit@12345";
-const stashAccessibleUser = stashAccessibleUserName + ":" + stashAccessibleUserPasswd;
-const serverPort = 3001;
+const authenticatedDownloadsEnabled = dependencies.authenticatedDownloadsEnabled;
+const authenticatedDownloadsUser = authenticatedDownloadsEnabled ? (dependencies.authenticationDetailsUsername + ":" + dependencies.authenticationDetailsPassword) : "";
 
-const formatsSupportedByRegularMeans = [ "plantuml", "dot", "graphviz", "mermaid", "ditaa", "actdiag", "nwdiag", "blockdiag", "seqdiag", "packetdiag", "rackdiag" ]
+const serverPort = dependencies.serverPortNumber;
+
+const formatsSupportedByRegularMeans = [ "plantuml", "dot", "graphviz", "mermaid", "ditaa", "actdiag", "nwdiag", "blockdiag", "seqdiag", "packetdiag", "rackdiag" ];
 const formatsSupportedByAsciiDctor = [ "erd", "msc", "shaape", "syntrax", "umlet", "vega", "vegalite", "wavedrom" ];
 
 app.get('/', onShowDefaultPageRequest);
@@ -44,7 +44,8 @@ app.get('/get-supported-graphs', onGetSupportedGraphList);
 
 app.listen(serverPort, () => 
 {
-	dependencies.PrintDependencyLocations()
+	dependencies.PrintDependencyLocations();
+	
 	console.log();
 	console.log(" >> GraphGenerator starting on port, " + serverPort + "...");
 });
@@ -200,7 +201,11 @@ function GraphGenerator(response)
 
 		try
 		{
-			var command = "curl --insecure --fail -sS " + location; // + " --user " +  stashAccessibleUser;
+			var command = "curl --insecure --fail -sS " + location;
+			
+			if (authenticatedDownloadsEnabled)
+				command = "curl --insecure --fail -sS " + location + " --user " +  authenticatedDownloadsUser;
+				
 			exec(command, OnScriptDownloaded);
 		}
 		catch (ex) 

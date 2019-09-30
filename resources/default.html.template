@@ -2,7 +2,8 @@
 	<head>
 		<title>GraphGenerator</title>
 		<script>
-			//setTimeout(function() { location.reload(); }, 1000);
+			var hostName = "[SERVER_HOST_NAME]";
+			var port = [SERVER_PORT_NUMBER];
 		</script>
 		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 		<style>
@@ -235,7 +236,7 @@
 				valueContentTypeName = valueContentType;
 				valueContentType = valueContentType.toLowerCase();
 
-				var serverUrl = "http://172.25.95.193:3000/"
+				var serverUrl = "http://" + hostName + ":" + port + "/"
 				var url = serverUrl + "generate-graph?location=" + encodeURIComponent(valueScriptLocation) + "&accessMethod=" + valueAccessMethod + "&contentType=" + valueContentType;
 				var mardownContent = "![" + valueContentTypeName + " Diagram](" + url + ")";
 

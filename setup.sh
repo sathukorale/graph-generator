@@ -15,6 +15,12 @@ source "$appDirectory/setup-files/setup-blockdiag-tools.sh"
 source "$appDirectory/setup-files/setup-zlib.sh"
 source "$appDirectory/setup-files/setup-libjpeg.sh"
 
+serverHostname=""
+serverPortNumber=3000
+authenticatedDownloadsEnabled="yes"
+authenticationDetails_Username=""
+authenticationDetails_Password=""
+
 DEPENDENCY_libgdDirectory=""
 DEPENDENCY_graphvizDirectory=""
 DEPENDENCY_libpngDirectory=""
@@ -36,6 +42,18 @@ function GenerateDepedenciesJs()
 {
     Log "Generating the Dependencies JS File..."
     
+    echo -e "// WARNING : Generated file. Do not delete.\n" > "$appDirectory/dependencies.js"
+    echo -e "const serverHostname = '$serverHostname';" >> "$appDirectory/dependencies.js"
+    echo -e "const serverPortNumber = $serverPortNumber;" >> "$appDirectory/dependencies.js"
+    echo -e "const authenticatedDownloadsEnabled = $authenticatedDownloadsEnabled;" >> "$appDirectory/dependencies.js"
+    
+    if [[ "$authenticatedDownloadsEnabled" == "true" ]]
+    then
+        echo -e "const authenticationDetailsUsername = '$authenticationDetails_Username';" >> "$appDirectory/dependencies.js"
+        echo -e "const authenticationDetailsPassword = '$authenticationDetails_Password';" >> "$appDirectory/dependencies.js"
+    fi
+    
+    echo -e "" >> "$appDirectory/dependencies.js"
     echo -e "const graphvizBinary = '$DEPENDENCY_graphvizDirectory/bin/dot';" >> "$appDirectory/dependencies.js"
     echo -e "const plantumlBinary = '$DEPENDENCY_plantumlBinary';" >> "$appDirectory/dependencies.js"
     echo -e "const mermaidBinary = '$DEPENDENCY_mermaidBinary';" >> "$appDirectory/dependencies.js"
@@ -83,6 +101,27 @@ function GenerateDepedenciesJs()
     echo -e "\tblockdiagTools," >> "$appDirectory/dependencies.js"
     echo -e "\tPrintDependencyLocations" >> "$appDirectory/dependencies.js"
     echo -e "};" >> "$appDirectory/dependencies.js"
+}
+
+function GenerateDefaultPage()
+{
+    defaultPageTemplate="$appDirectory/resources/default.html.template"
+    defaultPageLocation="$appDirectory/resources/default.html"
+    
+    if [ ! -f "$defaultPageTemplate" ]
+    then
+        echo "The required template file '$defaultPageTemplate' does not exit. Please make sure that the the repository is not modified."
+        exit 1
+    fi
+    
+    if [ -f "$defaultPageLocation" ]
+    then
+        rm -rf "$defaultPageLocation" > /dev/null 2>&1
+    fi
+    
+    cp "$defaultPageTemplate" "$defaultPageLocation" > /dev/null 2>&1
+    sed "s|\[SERVER_HOST_NAME\]|$serverHostname|g" -i "$defaultPageLocation" > /dev/null 2>&1
+    sed "s|\[SERVER_PORT_NUMBER\]|$serverPortNumber|g" -i "$defaultPageLocation" > /dev/null 2>&1
 }
 
 function GenerateStartScript()
@@ -142,6 +181,8 @@ function Setup()
 
     CleanTempDir
     CleanDependencyDirectory
+    
+    AskUserConfigurations
 
     SetupZlib
     Log ""
@@ -173,11 +214,88 @@ function Setup()
     SetupBlockdiagTools
     Log ""
     
+    GenerateDefaultPage
     GenerateDepedenciesJs
     GenerateStartScript
     
     echo ""
     echo "Process completed. Please use the generated 'start.sh' File to Start the GraphGenerator Server."
+}
+
+function AskUserConfigurations()
+{
+    GetUserInput serverHostname "Hostname or the ip address of this server"
+    GetUserInput serverPortNumber "Graph-Generator port number" 3000
+    GetUserConfirmation authenticatedDownloadsEnabled "The server can donwload files from remotes with basic password authentication, given that the same account details are setup accross all remotes. Would you like to setup this"
+    
+    if [[ "$authenticatedDownloadsEnabled" == "yes" ]]
+    then
+        authenticatedDownloadsEnabled="true"
+        GetUserInput authenticationDetails_Username "Remote username"
+        GetUserInput authenticationDetails_Password "Remote password"
+    else
+        authenticatedDownloadsEnabled="false"
+    fi
+}
+
+function GetUserInput()
+{
+    promptMessage="$2"
+    defaultValue=""
+    allowedValues=""
+    
+    if [ $# -ge 3 ]
+    then
+        defaultValue=`echo $3 | sed 's|[ \t]||g'`
+    fi
+    
+    if [ $# -ge 4 ]
+    then
+        allowedValues=`echo $4 | sed 's|[ \t]||g' | sed 's|::*|:|g'`
+        
+        if [[ "$allowedValues" != ":"* ]]; then allowedValues=":${allowedValues}"; fi
+        if [[ "$allowedValues" != *":" ]]; then allowedValues="${allowedValues}:"; fi
+    fi
+    
+    while true;
+    do
+        if [ -z "$defaultValue" ]
+        then
+            printf "$promptMessage : "
+        else
+            printf "$promptMessage [default value='$defaultValue'] : "
+        fi
+        
+        read userInput
+        
+        userInput=`echo "$userInput" | sed 's|[ \t]*||g' 2>/dev/null`
+        if [ -z "$userInput" ]
+        then
+            userInput="$defaultValue"
+        fi
+        
+        if [ ! -z "$userInput" ] && ([ -z "$allowedValues" ] || [[ "$allowedValues" == *":${userInput}:"* ]])
+        then
+            eval ${1}=\$userInput
+            return
+        fi
+        
+        printf "Invalid input. Please provide a valid input. "
+    done
+}
+
+function GetUserConfirmation()
+{
+    promptMessage="$2"
+    positives=":yes:yeah:yup:yah:y:"
+    negatives=":no:n:nah:"
+    
+    GetUserInput userInput "$promptMessage" "yes" "${positives}${negatives}"
+    
+    result="no"
+    if [[ "$positives" == *":${userInput}:"* ]]; then result="yes"; fi
+    
+    eval ${1}=\$result
 }
 
 Setup
