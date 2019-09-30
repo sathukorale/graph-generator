@@ -12,7 +12,7 @@
 Now for the diagrams to show up, the server has to see your diagram contents, and the generated diagram should somehow appear on your screen. So we have developed a couple of ways of making this happen. But if we are missing something feel free to file an issue.
 
 ### 1. Through Supported Extensions.
->> Before anything, shortcomings : Anyone who views your file have to have these externals tools installed. Otherwise its pretty non-intrusive.
+> Before anything, shortcomings : Anyone who views your file have to have these externals tools installed. Otherwise its pretty non-intrusive.
 
 ### 2. By Embedding Diagram File Urls.
->> Before anything, shortcomings : These diagram files should be visible to the `graph-generator` server.
+> Before anything, shortcomings : These diagram files should be visible to the `graph-generator` server.
