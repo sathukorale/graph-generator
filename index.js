@@ -206,7 +206,7 @@ function GraphGenerator(response)
 			if (authenticatedDownloadsEnabled)
 				command = "curl --insecure --fail -sS " + location + " --user " +  authenticatedDownloadsUser;
 				
-			exec(command, OnScriptDownloaded);
+			exec(command, { timeout: 5000 }, OnScriptDownloaded);
 		}
 		catch (ex) 
 		{
@@ -385,8 +385,6 @@ function GraphGenerator(response)
 
 	var OnGraphGenerated = function(error, stdout, stderr)
 	{
-		console.log("stdout=" + stdout);
-		console.log("stderr=" + stderr);
 		console.log(" >> The " + self._contentType + " binary has processed the received content. Checking whether the expected output is available.");
 
 		try
@@ -489,13 +487,13 @@ function GraphGenerator(response)
 		}
 
 		var updatedScriptContent = scriptContent;
-                if (IsSupportedByAsciiDoctor(self._contentType))
-                {
-                        updatedScriptContent =  "[" + self._contentType + ", " + uniqueName + "_output, png]\n"
-                        updatedScriptContent += "....\n"
-                        updatedScriptContent += scriptContent + "\n"
-                        updatedScriptContent += "...."
-                }
+        if (IsSupportedByAsciiDoctor(self._contentType))
+        {
+            updatedScriptContent =  "[" + self._contentType + ", " + uniqueName + "_output, png]\n"
+            updatedScriptContent += "....\n"
+            updatedScriptContent += scriptContent + "\n"
+            updatedScriptContent += "...."
+        }
 
 		writeFileAsync(inputFileName, updatedScriptContent).catch(error => {});
 		
