@@ -1,1 +1,1 @@
-# graph-generator
+# Graph Generator Server
