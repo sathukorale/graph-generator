@@ -1,5 +1,17 @@
 # Graph Generator Server
 
+## Supported Languages
+- [X] plantuml
+- [X] dot/graphviz
+- [X] mermaid
+- [X] ditaa
+- [X] actdiag
+- [X] nwdiag
+- [X] blockdiag
+- [X] seqdiag
+- [X] packetdiag
+- [X] rackdiag
+
 ## Running the server
 
 1. Before anything check the list of pre-requisites.
