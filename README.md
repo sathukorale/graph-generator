@@ -12,7 +12,7 @@
 Now for the diagrams to show up, the server has to see your diagram contents, and the generated diagram should somehow appear on your screen. So we have developed a couple of ways of making this happen. But if we are missing something [feel free to file an issue](https://github.com/sathukorale/graph-generator/issues/new).
 
 ### 1. Through Supported Extensions.
-> Before anything, shortcomings : Anyone who views your file have to have these externals tools installed. Otherwise its pretty non-intrusive.
+> Before anything, shortcomings : Anyone who views your file have to have these externals tools installed. Otherwise its pretty non-intrusive. Honestly I prefer this method over the others.
 
-### 2. By Embedding Diagram File Urls.
-> Before anything, shortcomings : These diagram files should be visible to the `graph-generator` server.
+### 2. By Embedding Diagram Image Urls.
+> Before anything, shortcomings : These diagram files should be visible to the `graph-generator` server. And this method works only if you can embed images into your documentations. Thus this won't render standalone diagrams.
