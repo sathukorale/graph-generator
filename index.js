@@ -47,7 +47,7 @@ app.listen(serverPort, () =>
 	dependencies.PrintDependencyLocations();
 	
 	console.log();
-	console.log(" >> GraphGenerator starting on port, " + serverPort + "...");
+	console.log(" >> GraphGenerator starting 'http://" + dependencies.serverHostname + ":" + dependencies.serverPortNumber + "/'");
 });
 
 function IsSupportedByAsciiDoctor(contentType)
@@ -186,7 +186,7 @@ function GetFileSize(filePath)
 function GraphGenerator(response)
 {
 	this._response = response;
-	this._grapContent = null;
+	this._graphContent = null;
 	this._scriptLocation = null;
 	this._scriptContent = null;
 	this._accessType = null;
@@ -197,36 +197,64 @@ function GraphGenerator(response)
 
 	var DownloadScript = function(location, accessType)
 	{
-		console.log(" >> Downloading the content of the file at '" + location + "'.");
+		if (authenticatedDownloadsEnabled)
+			DownloadFileWithCredentials(location, accessType);
+		else
+			DownloadFileWithoutCredentials(location, accessType);
+	};
+	
+	var DownloadFileWithCredentials = function(location, accessType)
+	{
+		console.log(" >> Downloading the content of the file at '" + location + "' using configured credentials.");
 
 		try
 		{
-			var command = "curl --insecure --fail -sS " + location;
-			
-			if (authenticatedDownloadsEnabled)
-				command = "curl --insecure --fail -sS " + location + " --user " +  authenticatedDownloadsUser;
-				
-			exec(command, { timeout: 5000 }, OnScriptDownloaded);
+			var command = "curl --insecure --fail -sS " + location + " --user " +  authenticatedDownloadsUser;
+			exec(command, { timeout: 5000 }, OnScriptDownloadWithCredentialsResult);
 		}
 		catch (ex) 
 		{
 			console.log(" >> The curl command failed abruptly. Most likely the script location was invalid. (Reason=" + ex + ")");
 		}
 	};
-
-	var OnScriptDownloaded = function(err, stdout, stderr)
+	
+	var DownloadFileWithoutCredentials = function(location, accessType)
 	{
-		if (stdout.trim().length == 0)
+		console.log(" >> Downloading the content of the file at '" + location + "'.");
+
+		try
 		{
-			console.log(" >> Couldn't download the file at, '" + self._scriptLocation + "'. (Reason='" + stderr.trim() + "')");
-
-			response.status(400);
-			response.send("Couldn't download file at '" + self._scriptLocation + "'. (Reason='" + stderr.trim() + "')");
-			return;
+			var command = "curl --insecure --fail -sS " + location;
+			exec(command, { timeout: 5000 }, OnScriptDownloadWithoutCredentialsResult);
 		}
+		catch (ex) 
+		{
+			console.log(" >> The curl command failed abruptly. Most likely the script location was invalid. (Reason=" + ex + ")");
+		}
+	};
+	
+	var OnScriptDownloadWithCredentialsResult = function(err, stdout, stderr)
+	{
+		if (stdout.trim().length == 0) DownloadFileWithoutCredentials(self._scriptLocation, self._scriptContent);
+		else OnScriptDownloaded(stdout.trim());
+	};
+	
+	var OnScriptDownloadWithoutCredentialsResult = function(err, stdout, stderr)
+	{
+		if (stdout.trim().length == 0) OnScriptFailedToDownload(stderr.trim());
+		else OnScriptDownloaded(stdout.trim());
+	};
+	
+	var OnScriptFailedToDownload = function(reason)
+	{
+		console.log(" >> Couldn't download the file at, '" + self._scriptLocation + "'. (Reason='" + reason + "')");
 
-		var scriptContent = stdout.trim();
+		response.status(400);
+		response.send("Couldn't download file at '" + self._scriptLocation + "'. (Reason='" + reason + "')");
+	}
 
+	var OnScriptDownloaded = function(scriptContent)
+	{
 		console.log(" >> Checking whether an already generated graph exists for these details. (Url=" + self._scriptLocation + ")");
 
 		var uniqueName = GetTimeInNanoseconds();
@@ -405,7 +433,7 @@ function GraphGenerator(response)
 		}
 		else
 		{
-			console.log(" >> The expected output image file ('" + self._outputFileLocation + "') was not found. This is indicative of a server-side error. Replying back with the relevant details.");
+			console.log(" >> The expected output image file ('" + self._outputFileLocation + "') was not found. This is indicative of a server-side error. Replying back with the relevant details. (Reason='" + stderr.trim() +  "')");
 
 			self._response.status(500);
 			self._response.send("The " + self._contentType + " binary has failed to generate the output image file.");

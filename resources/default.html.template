@@ -144,8 +144,16 @@
 							<td>Content Type</td>
 							<td class="option-value-container">
 								<select class="option-value" id="cmbContentType">
-									<option>PlantUML</option>
-									<option>Dot</option>
+									<option>plantuml</option>
+									<option>dot</option>
+									<option>mermaid</option>
+									<option>ditaa</option>
+									<option>actdiag</option>
+									<option>nwdiag</option>
+									<option>blockdiag</option>
+									<option>seqdiag</option>
+									<option>packetdiag</option>
+									<option>rackdiag</option>
 								</select>
 							</td>
 						</tr>
@@ -232,7 +240,7 @@
 				
 				valueScriptLocation = valueScriptLocation.trim();
 				valueAccessMethod = (valueAccessMethod == 0 ? "http" : "git");
-				valueContentType = (valueContentType == 0 ? "PlantUML" : "Dot");
+				valueContentType = $("#cmbContentType").val().trim();
 				valueContentTypeName = valueContentType;
 				valueContentType = valueContentType.toLowerCase();
 
