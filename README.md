@@ -11,6 +11,14 @@
 - [X] seqdiag
 - [X] packetdiag
 - [X] rackdiag
+- [ ] erd
+- [ ] msc
+- [ ] shaape
+- [ ] syntrax
+- [ ] umlet
+- [ ] vega
+- [ ] vegalite
+- [ ] wavedrom
 
 ## Running the server
 
